@@ -1,9 +1,14 @@
 
 package ledger;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class LedgeGUI extends javax.swing.JFrame {
 
+    Ledger lg = new Ledger();
     
+    String[] cols = {"Name", "Trade_Mark", "Item", "Quantity", "Price"};
     public LedgeGUI() {
         initComponents();
         
@@ -207,18 +212,37 @@ public class LedgeGUI extends javax.swing.JFrame {
 
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Trade Mark", "Item", "Quantity", " Price"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setColumnSelectionAllowed(true);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Name");
@@ -257,6 +281,11 @@ public class LedgeGUI extends javax.swing.JFrame {
         jButton4.setText("Update");
 
         jButton5.setText("Refresh");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -297,7 +326,8 @@ public class LedgeGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton2, jButton3, jButton4, jButton5});
@@ -339,9 +369,11 @@ public class LedgeGUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
             .addComponent(jSeparator3)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         data_tab.addTab("Data", jPanel2);
@@ -407,6 +439,7 @@ public class LedgeGUI extends javax.swing.JFrame {
         tf_item.setText("");
         tf_quantity.setText("");
         tf_price.setText("");
+        
     }//GEN-LAST:event_newentryActionPerformed
 
     private void tf_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_nameActionPerformed
@@ -419,22 +452,34 @@ public class LedgeGUI extends javax.swing.JFrame {
     
     // Adds data into the database using the functions defined in the package ledger.
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
-        Ledger lg = new Ledger();
-        String name = tf_name.getText();
-        String tmark = tf_tmark.getText();
-        String item = tf_item.getText();
-        int quantity = Integer.parseInt(tf_quantity.getText());
-        int price = Integer.parseInt(tf_price.getText());
-        try{
-            lg.insertToDb(name, tmark.toUpperCase(), item, quantity, price);
+        if((((tf_name.getText().equals("") || (tf_tmark.getText().equals(""))) || (tf_item.getText().equals(""))) || tf_quantity.getText().equals("")) || tf_price.getText().equals("")) 
+            JOptionPane.showMessageDialog(null, "Don't keep any field empty");
+     
+        else{
+            String name = tf_name.getText();
+            String tmark = tf_tmark.getText();
+            String item = tf_item.getText();
+            int quantity = Integer.parseInt(tf_quantity.getText());
+            int price = Integer.parseInt(tf_price.getText());
+            try{
+                lg.insertToDb(name, tmark.toUpperCase(), item, quantity, price);
+            }
+            catch(Exception e){      
+            }
+            tf_item.setText("");
+            tf_quantity.setText("");
+            tf_price.setText("");
+            
         }
-    
-         catch(Exception e){      
-        }
-        tf_item.setText("");
-        tf_quantity.setText("");
-        tf_price.setText("");
+                     
+            
     }//GEN-LAST:event_submitActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+     
+        jTable1.setModel(new DefaultTableModel(lg.getAll(), cols));
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

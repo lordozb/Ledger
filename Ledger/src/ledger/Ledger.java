@@ -53,7 +53,47 @@ public class Ledger  {
         catch(Exception e){            
         }             
     }
-    
+    /**
+     * THIS METHOD IS USED TO GET EVERYTHING FROM THE DATABASE AND STORE IT IN THE ARRAY.
+     * DUE TO MY ZERO KNOWLEDGE OF GENERICS I HAVE USED A VERBOSE APPROACH TO FETCH ALL THE DATA.
+     * FIRST I GO TO THE LAST ROW AND GET ITS COUNT THEN I ALLOCATE ENOUGH MEMORY TO STRING OBJECTS
+     * AND THEN GO BACK TO BEFOREFIRST ROW AND START ITERATING AND FILLING UP THE VALUES.
+     * @param i
+     * @return 
+     */
+    public String[][] getAll(){
+        
+        String[][] data = null;
+        int i = 0;
+        try{
+            connectDb();
+            String query = "SELECT * FROM ledger_table";
+            statement = c.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                i++;
+            }
+            
+            rs = statement.executeQuery();
+            data = new String[i][5];
+            int j = 0;          
+            while(rs.next()){                
+                    
+                    data[j][0] = rs.getString("Name");
+                    data[j][1] = rs.getString("Trade_Mark");
+                    data[j][2] = rs.getString("Item");
+                    data[j][3] = Integer.toString(rs.getInt("Quantity"));
+                    data[j][4] = Integer.toString(rs.getInt("Price"));
+                    j++;              
+                            
+            }
+            
+            
+        }
+        catch(Exception e){            
+        }
+        return data;
+    }
     public void searchName(String name_entry){
         name_db = name_entry;
         try{
