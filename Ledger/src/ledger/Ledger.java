@@ -57,8 +57,7 @@ public class Ledger  {
      * THIS METHOD IS USED TO GET EVERYTHING FROM THE DATABASE AND STORE IT IN THE ARRAY.
      * DUE TO MY ZERO KNOWLEDGE OF GENERICS I HAVE USED A VERBOSE APPROACH TO FETCH ALL THE DATA.
      * FIRST I GO TO THE LAST ROW AND GET ITS COUNT THEN I ALLOCATE ENOUGH MEMORY TO STRING OBJECTS
-     * AND THEN GO BACK TO BEFOREFIRST ROW AND START ITERATING AND FILLING UP THE VALUES.
-     * @param i
+     * AND THEN GO BACK TO BEFOREFIRST ROW AND START ITERATING AND FILLING UP THE VALUES. 
      * @return 
      */
     public String[][] getAll(){
@@ -68,8 +67,9 @@ public class Ledger  {
         try{
             connectDb();
             String query = "SELECT * FROM ledger_table";
-            statement = c.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE);
+            statement = c.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
+            
             while(rs.next()){
                 i++;
             }
@@ -87,65 +87,129 @@ public class Ledger  {
                     j++;              
                             
             }
-            
+            c.close();
             
         }
         catch(Exception e){            
         }
         return data;
     }
-    public void searchName(String name_entry){
+    
+    
+    public String[][] searchName(String name_entry){
         name_db = name_entry;
+        String[][] data = null;
+        int i = 0;
         try{
             connectDb();
             
             String query = "SELECT * FROM ledger_table WHERE Name = ?";
             statement = c.prepareStatement(query);
             statement.setString(1, name_db);
-            statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
             
-            c.commit();
-            c.close();
+            while(rs.next()){
+                i++;
+            }
+            
+            rs = statement.executeQuery();
+            data = new String[i][5];
+            int j = 0;          
+            while(rs.next()){                
+                    
+                    data[j][0] = rs.getString("Name");
+                    data[j][1] = rs.getString("Trade_Mark");
+                    data[j][2] = rs.getString("Item");
+                    data[j][3] = Integer.toString(rs.getInt("Quantity"));
+                    data[j][4] = Integer.toString(rs.getInt("Price"));
+                    j++;              
+                            
+            }
+            c.close();            
+            
         }
         catch(Exception e){
             
         }
+        return data;
     }
     
-    public void searchTM(String tmark_entry){
+   
+    public String[][] searchTM(String tmark_entry){
         tm_db = tmark_entry;
+        String[][] data = null;
+        int i = 0;
         try{
             connectDb();
             
-            String query = "SELECT * FROM ledger_table WHERE [Trade Mark] = ?";
+            String query = "SELECT * FROM ledger_table WHERE Trade_Mark = ?";
             statement = c.prepareStatement(query);
             statement.setString(1, tm_db);
-            statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
             
-            c.commit();
-            c.close();
+            while(rs.next()){
+                i++;
+            }
+            
+            rs = statement.executeQuery();
+            data = new String[i][5];
+            int j = 0;          
+            while(rs.next()){                
+                    
+                    data[j][0] = rs.getString("Name");
+                    data[j][1] = rs.getString("Trade_Mark");
+                    data[j][2] = rs.getString("Item");
+                    data[j][3] = Integer.toString(rs.getInt("Quantity"));
+                    data[j][4] = Integer.toString(rs.getInt("Price"));
+                    j++;              
+                            
+            }
+            c.close();           
+            
         }
         catch(Exception e){
             
         }
+        return data;
+        
     }
     
-    public void searchItem(String item_entry){
+    public String[][] searchItem(String item_entry){
         item_db = item_entry;
+        String[][] data = null;
+        int i = 0;
+        
         try{
             connectDb();
             
             String query = "SELECT * FROM ledger_table WHERE Item = ?";
             statement = c.prepareStatement(query);
             statement.setString(1, item_db);
-            statement.executeQuery();
+            ResultSet rs = statement.executeQuery();                       
             
-            c.commit();
+             while(rs.next()){
+                i++;
+            }
+            
+            rs = statement.executeQuery();
+            data = new String[i][5];
+            int j = 0;          
+            while(rs.next()){                
+                    
+                    data[j][0] = rs.getString("Name");
+                    data[j][1] = rs.getString("Trade_Mark");
+                    data[j][2] = rs.getString("Item");
+                    data[j][3] = Integer.toString(rs.getInt("Quantity"));
+                    data[j][4] = Integer.toString(rs.getInt("Price"));
+                    j++;              
+                            
+            }
             c.close();
         }
         catch(Exception e){
             
         }
+        return data;
     }
      
 }
