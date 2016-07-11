@@ -1,22 +1,26 @@
 
 package ledger;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class LedgeGUI extends javax.swing.JFrame {
-
+    
+    // GLOBAL OBJECT FOR ALL FUNCTIONS.
     Ledger lg = new Ledger();
     
-    String[] cols = {"Name", "Trade_Mark", "Item", "Quantity", "Price"};
+    // FOR JTABLE
+    String[] cols = {"ID", "Name", "Trade_Mark", "Item", "Quantity", "Price"};
     public LedgeGUI() {
         initComponents();
         
         // FOR JCOMBOBOX
         String[] cbox = {"Name", "TM", "Item"};
-        data_search_cbox.setModel(new DefaultComboBoxModel(cbox));
-                
+        data_search_cbox.setModel(new DefaultComboBoxModel(cbox));       
+                        
     }
 
     /**
@@ -29,6 +33,7 @@ public class LedgeGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jToggleButton1 = new javax.swing.JToggleButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         data_tab = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         tf_name = new javax.swing.JTextField();
@@ -60,10 +65,13 @@ public class LedgeGUI extends javax.swing.JFrame {
         data_item_tf = new javax.swing.JTextField();
         data_quantity_tf = new javax.swing.JTextField();
         data_price_tf = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        data_delete_btn = new javax.swing.JButton();
+        data_update_btn = new javax.swing.JButton();
+        data_refresh_btn = new javax.swing.JButton();
         data_search_cbox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        data_edit_tf = new javax.swing.JTextField();
+        data_edit_btn = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -85,6 +93,7 @@ public class LedgeGUI extends javax.swing.JFrame {
             }
         });
 
+        newentry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/new-file.png"))); // NOI18N
         newentry.setText("New");
         newentry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,6 +122,7 @@ public class LedgeGUI extends javax.swing.JFrame {
             }
         });
 
+        submit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/document-pixel.png"))); // NOI18N
         submit.setText("Submit");
         submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +143,7 @@ public class LedgeGUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(400, Short.MAX_VALUE)
+                .addContainerGap(495, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -191,7 +201,7 @@ public class LedgeGUI extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addComponent(submit)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSeparator1)
@@ -200,6 +210,7 @@ public class LedgeGUI extends javax.swing.JFrame {
 
         data_tab.addTab("New Entry", jPanel1);
 
+        data_search_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/magnifier.png"))); // NOI18N
         data_search_btn.setText("Search");
         data_search_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,20 +223,20 @@ public class LedgeGUI extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "Trade Mark", "Item", "Quantity", " Price"
+                "ID", "Name", "Trade Mark", "Item", "Quantity", "Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true
+                true, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -262,18 +273,41 @@ public class LedgeGUI extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Delete");
-
-        jButton4.setText("Update");
-
-        jButton5.setText("Refresh");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        data_delete_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/delete-button.png"))); // NOI18N
+        data_delete_btn.setText("Delete");
+        data_delete_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                data_delete_btnActionPerformed(evt);
+            }
+        });
+
+        data_update_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/document-pixel.png"))); // NOI18N
+        data_update_btn.setText("Update");
+        data_update_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_update_btnActionPerformed(evt);
+            }
+        });
+
+        data_refresh_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/refresh-buttons.png"))); // NOI18N
+        data_refresh_btn.setText("Refresh");
+        data_refresh_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_refresh_btnActionPerformed(evt);
             }
         });
 
         data_search_cbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel1.setText("ID");
+
+        data_edit_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/edit-tool.png"))); // NOI18N
+        data_edit_btn.setText("Edit");
+        data_edit_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_edit_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -282,50 +316,62 @@ public class LedgeGUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(data_search_btn)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(data_search_cbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(data_search_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(data_name_tf)
-                                .addComponent(data_tmark_tf)
-                                .addComponent(data_item_tf)
-                                .addComponent(data_quantity_tf)
-                                .addComponent(data_price_tf))))
-                    .addComponent(jLabel7)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(data_refresh_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(data_update_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(data_delete_btn))
+                    .addComponent(jLabel12)
                     .addComponent(jLabel8)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel12)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel7))
+                        .addGap(56, 56, 56)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(data_search_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_edit_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_name_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_tmark_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_item_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_quantity_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_price_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(data_search_btn, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(data_edit_btn, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(data_search_cbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton3, jButton4, jButton5});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {data_delete_btn, data_refresh_btn, data_update_btn});
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {data_edit_tf, data_item_tf, data_name_tf, data_price_tf, data_quantity_tf, data_search_tf, data_tmark_tf});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(data_search_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(data_search_cbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(data_search_cbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(data_search_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(data_search_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(data_edit_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(data_search_btn)
-                .addGap(21, 21, 21)
+                .addComponent(data_edit_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(data_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(data_tmark_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -333,34 +379,42 @@ public class LedgeGUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(data_item_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(data_quantity_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(data_price_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addGap(45, 45, 45)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(data_update_btn)
+                    .addComponent(data_refresh_btn)
+                    .addComponent(data_delete_btn))
                 .addContainerGap())
             .addComponent(jSeparator3)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane1))
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {data_edit_tf, data_item_tf, data_name_tf, data_price_tf, data_quantity_tf, data_search_tf, data_tmark_tf});
 
         data_tab.addTab("Data", jPanel2);
 
         jMenu3.setText("Help");
 
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/about-us.png"))); // NOI18N
         jMenuItem4.setText("About");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem4);
 
+        contact.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ledger/Images/email-with-at.png"))); // NOI18N
         contact.setText("Contact");
         contact.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,37 +445,53 @@ public class LedgeGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void data_search_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_search_btnActionPerformed
+        
+        if(data_search_tf.getText().equals(""))
+            JOptionPane.showMessageDialog(null,"Enter Name/Trade_Mark/Item");
+        
         if(data_search_cbox.getSelectedItem().toString().equals("Item"))
-            jTable1.setModel(new DefaultTableModel(lg.searchItem(data_search_tf.getText().toUpperCase()), cols){
-                @Override
-                 public boolean isCellEditable(int row, int column) {
-                    //all cells false
-                    return false;
-                }
-            });
+            try {
+                jTable1.setModel(new DefaultTableModel(lg.searchItem(data_search_tf.getText().toUpperCase()), cols){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        //all cells false
+                        return false;
+                    }
+                });
+        } catch (Exception ex) {
+            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(data_search_cbox.getSelectedItem().toString().equals("Name"))
-            jTable1.setModel(new DefaultTableModel(lg.searchName(data_search_tf.getText().toUpperCase()), cols){
-                @Override
-                 public boolean isCellEditable(int row, int column) {
-                    //all cells false
-                    return false;
-                }
-            });
+            try {
+                jTable1.setModel(new DefaultTableModel(lg.searchName(data_search_tf.getText().toUpperCase()), cols){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        //all cells false
+                        return false;
+                    }
+                });
+        } catch (Exception ex) {
+            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         if(data_search_cbox.getSelectedItem().toString().equals("TM"))
-            jTable1.setModel(new DefaultTableModel(lg.searchTM(data_search_tf.getText().toUpperCase()), cols){
-                @Override
-                 public boolean isCellEditable(int row, int column) {
-                    //all cells false
-                    return false;
-                }
-            });
+            try {
+                jTable1.setModel(new DefaultTableModel(lg.searchTM(data_search_tf.getText().toUpperCase()), cols){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        //all cells false
+                        return false;
+                    }
+                });
+        } catch (Exception ex) {
+            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         data_search_tf.setText("");
     }//GEN-LAST:event_data_search_btnActionPerformed
 
     private void contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactActionPerformed
-        
+      new ContactGUI().setVisible(true);  
     }//GEN-LAST:event_contactActionPerformed
 
     private void tf_priceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_priceActionPerformed
@@ -475,17 +545,97 @@ public class LedgeGUI extends javax.swing.JFrame {
             
     }//GEN-LAST:event_submitActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void data_refresh_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_refresh_btnActionPerformed
         
-        jTable1.setModel(new DefaultTableModel(lg.getAll(), cols){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-            //all cells false
-            return false;
-    }
-        });
+        try {
+            jTable1.setModel(new DefaultTableModel(lg.getAll(), cols){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    //all cells false
+                    return false;
+                    
+                }
                 
-    }//GEN-LAST:event_jButton5ActionPerformed
+            });
+        } catch (Exception ex) {
+            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+    }//GEN-LAST:event_data_refresh_btnActionPerformed
+
+    private void data_edit_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_edit_btnActionPerformed
+        try{
+            String id = data_edit_tf.getText();
+            if(id.equals("")){
+                JOptionPane.showMessageDialog(null,"Enter ID");
+            }
+            else{
+                
+                String[] values = lg.editItem(id);
+                data_name_tf.setText(values[0]);
+                data_tmark_tf.setText(values[1]);
+                data_item_tf.setText(values[2]);
+                data_quantity_tf.setText(values[3]);
+                data_price_tf.setText(values[4]);                
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }//GEN-LAST:event_data_edit_btnActionPerformed
+
+    private void data_update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_update_btnActionPerformed
+        try{
+            String id = data_edit_tf.getText();
+            String name = data_name_tf.getText();
+            String tm = data_tmark_tf.getText();
+            String item = data_item_tf.getText();
+            String quantity = data_quantity_tf.getText();
+            String price = data_price_tf.getText();
+            if(id.equals("") || name.equals("") || tm.equals("") || item.equals("") || quantity.equals("") || price.equals(""))
+                JOptionPane.showMessageDialog(null, "Enter all Fields");
+            
+            else
+                lg.updateDb(name.toUpperCase(), tm.toUpperCase(), item.toUpperCase(), Integer.parseInt(quantity), Integer.parseInt(price), Integer.parseInt(id));
+            
+            data_edit_tf.setText("");
+            data_name_tf.setText("");
+            data_tmark_tf.setText("");
+            data_item_tf.setText("");
+            data_quantity_tf.setText("");
+            data_price_tf.setText("");
+        }
+        catch(Exception e){
+            
+        }
+    }//GEN-LAST:event_data_update_btnActionPerformed
+
+    private void data_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_delete_btnActionPerformed
+        try{
+            String id = data_edit_tf.getText();
+            if(id.equals(""))
+                JOptionPane.showMessageDialog(null, "Enter ID");
+            
+            else{
+                lg.deleteFromDb(Integer.parseInt(id));
+            
+                data_edit_tf.setText("");
+                data_name_tf.setText("");
+                data_tmark_tf.setText("");
+                data_item_tf.setText("");
+                data_quantity_tf.setText("");
+                data_price_tf.setText("");
+                JOptionPane.showMessageDialog(null, "Successfully Deleted");
+            }
+        }
+        catch(Exception e){
+            
+        }
+    }//GEN-LAST:event_data_delete_btnActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        new AboutGUI().setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -523,19 +673,23 @@ public class LedgeGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenuItem contact;
+    private javax.swing.JButton data_delete_btn;
+    private javax.swing.JButton data_edit_btn;
+    private javax.swing.JTextField data_edit_tf;
     private javax.swing.JTextField data_item_tf;
     private javax.swing.JTextField data_name_tf;
     private javax.swing.JTextField data_price_tf;
     private javax.swing.JTextField data_quantity_tf;
+    private javax.swing.JButton data_refresh_btn;
     private javax.swing.JButton data_search_btn;
     private javax.swing.JComboBox<String> data_search_cbox;
     private javax.swing.JTextField data_search_tf;
     private javax.swing.JTabbedPane data_tab;
     private javax.swing.JTextField data_tmark_tf;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton data_update_btn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
