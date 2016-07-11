@@ -526,20 +526,23 @@ public class LedgeGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Don't keep any field empty");
      
         else{
-            String name = tf_name.getText();
-            String tmark = tf_tmark.getText();
-            String item = tf_item.getText();
-            int quantity = Integer.parseInt(tf_quantity.getText());
-            int price = Integer.parseInt(tf_price.getText());
+          
             try{
+                String name = tf_name.getText();
+                String tmark = tf_tmark.getText();
+                String item = tf_item.getText();
+                int quantity = Integer.parseInt(tf_quantity.getText());
+                int price = Integer.parseInt(tf_price.getText());
+                
                 lg.insertToDb(name.toUpperCase(), tmark.toUpperCase(), item.toUpperCase(), quantity, price);
+                tf_item.setText("");
+                tf_quantity.setText("");
+                tf_price.setText("");
             }
-            catch(Exception e){      
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Check Input Fiels");
             }
-            tf_item.setText("");
-            tf_quantity.setText("");
-            tf_price.setText("");
-            
+           
         }
                      
             
@@ -606,7 +609,7 @@ public class LedgeGUI extends javax.swing.JFrame {
             data_price_tf.setText("");
         }
         catch(Exception e){
-            
+            JOptionPane.showMessageDialog(null, "ID not found");    
         }
     }//GEN-LAST:event_data_update_btnActionPerformed
 
@@ -629,7 +632,7 @@ public class LedgeGUI extends javax.swing.JFrame {
             }
         }
         catch(Exception e){
-            
+            JOptionPane.showMessageDialog(null, "ID not found");
         }
     }//GEN-LAST:event_data_delete_btnActionPerformed
 

@@ -260,6 +260,7 @@ public class Ledger  {
         quantity_db = quantity_entry;
         price_db = price_entry;
         ID = id;
+        int x;
         
         
         try{
@@ -272,29 +273,43 @@ public class Ledger  {
             statement.setInt(4, quantity_db);
             statement.setInt(5, price_db);
             statement.setInt(6, ID);
-            statement.executeUpdate();            
+            x = statement.executeUpdate(); 
+            
+            if(x != 1)
+                throw new Exception();
             
             c.commit();
             c.close();           
             
         }
-        catch(Exception e){            
+        catch(Exception e){ 
+            throw new Exception();
         }             
+        finally{
+            c.commit();
+            c.close();    
+        }
     }
     
     public void deleteFromDb(int id) throws Exception{
         ID = id;
+        int x;
         try{
             connectDb();
             String query = "DELETE FROM ledger_table WHERE ID = ?";
             statement = c.prepareStatement(query);
             statement.setInt(1, ID);
-            statement.executeUpdate();
-            c.commit();
-            c.close();            
+            x = statement.executeUpdate();
+            if(x != 1)
+                throw new Exception();
+                        
         }
         catch(Exception e){
-            
+            throw new Exception();
+        }
+        finally{
+            c.commit();
+            c.close();   
         }
     }
      
