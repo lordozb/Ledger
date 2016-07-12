@@ -231,6 +231,8 @@ public class Ledger  {
             statement = c.prepareStatement(query);
             statement.setString(1, item_db);
             ResultSet rs = statement.executeQuery();                     
+            if(rs.next() == false)
+                throw new Exception();
             
             data = new String[5];
             int j = 0;          
@@ -248,7 +250,10 @@ public class Ledger  {
             c.close();
         }
         catch(Exception e){
-            
+            throw new Exception();
+        }
+        finally{
+            c.close();
         }
         return data;
     }
@@ -308,7 +313,7 @@ public class Ledger  {
             throw new Exception();
         }
         finally{
-            c.commit();
+            
             c.close();   
         }
     }

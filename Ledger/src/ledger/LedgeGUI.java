@@ -583,7 +583,7 @@ public class LedgeGUI extends javax.swing.JFrame {
             }
         }
         catch(Exception e){
-            
+        JOptionPane.showMessageDialog(null,"ID not found");    
         }
     }//GEN-LAST:event_data_edit_btnActionPerformed
 
