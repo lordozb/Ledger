@@ -13,7 +13,7 @@ public class LedgeGUI extends javax.swing.JFrame {
     Ledger lg = new Ledger();
     
     // FOR JTABLE
-    String[] cols = {"ID", "Name", "Trade_Mark", "Item", "Quantity", "Price"};
+    String[] cols = {"ID", "Name", "Trade Mark", "Item", "Quantity", "Price"};
     public LedgeGUI() {
         initComponents();
         
@@ -459,7 +459,7 @@ public class LedgeGUI extends javax.swing.JFrame {
                     }
                 });
         } catch (Exception ex) {
-            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Name/Item/Tmark not found");
         }
         if(data_search_cbox.getSelectedItem().toString().equals("Name"))
             try {
@@ -471,7 +471,7 @@ public class LedgeGUI extends javax.swing.JFrame {
                     }
                 });
         } catch (Exception ex) {
-            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Name/Item/Tmark not found");
         }
         
         if(data_search_cbox.getSelectedItem().toString().equals("TM"))
@@ -484,10 +484,12 @@ public class LedgeGUI extends javax.swing.JFrame {
                     }
                 });
         } catch (Exception ex) {
-            Logger.getLogger(LedgeGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Name/Item/Tmark not found");
         }
+        finally{
+                data_search_tf.setText("");
+            }
         
-        data_search_tf.setText("");
     }//GEN-LAST:event_data_search_btnActionPerformed
 
     private void contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactActionPerformed

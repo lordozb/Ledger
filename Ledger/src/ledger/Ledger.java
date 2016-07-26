@@ -46,8 +46,7 @@ public class Ledger  {
             statement.setInt(4, quantity_db);
             statement.setInt(5, price_db);
             statement.executeUpdate();            
-            
-            c.commit();
+          
             c.close();           
             
         }
@@ -111,6 +110,10 @@ public class Ledger  {
             statement.setString(1, name_db);
             ResultSet rs = statement.executeQuery();
             
+            if(rs.next() == false)
+                throw new Exception();
+            
+            rs = statement.executeQuery();
             while(rs.next()){
                 i++;
             }
@@ -129,11 +132,14 @@ public class Ledger  {
                     j++;              
                             
             }
-            c.close();            
+                       
             
         }
         catch(Exception e){
-            
+            throw new Exception();
+        }
+        finally{
+            c.close(); 
         }
         return data;
     }
@@ -234,6 +240,8 @@ public class Ledger  {
             if(rs.next() == false)
                 throw new Exception();
             
+            
+            rs = statement.executeQuery();
             data = new String[5];
             int j = 0;          
             while(rs.next()){                
@@ -283,7 +291,6 @@ public class Ledger  {
             if(x != 1)
                 throw new Exception();
             
-            c.commit();
             c.close();           
             
         }
@@ -291,7 +298,7 @@ public class Ledger  {
             throw new Exception();
         }             
         finally{
-            c.commit();
+            
             c.close();    
         }
     }
